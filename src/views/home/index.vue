@@ -4,7 +4,7 @@
       <div class="logo" :class="{miniLogo:isCollapse}"></div>
 
       <!-- 导航 -->
-        <el-menu
+      <el-menu
         default-active="1"
         class="el-menu-vertical-demo"
         background-color="#002033"
@@ -43,7 +43,6 @@
         </el-menu-item>
       </el-menu>
       <!-- 导航 -->
-
     </el-aside>
     <el-container>
       <el-header>
@@ -52,16 +51,14 @@
         <!-- 用户 -->
         <el-dropdown>
           <span class="el-dropdown-link">
-            <img src="../../assets/images/avatar.jpg" />
-            <span class="usename">起个啥名字</span>
+            <img class="avatar" :src="photo" alt />
+            <span class="username">{{ name }}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <!-- 插槽 -->
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">
-                个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">
-                退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" @click.native="setting()">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" @click.native="logout()">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <!-- 用户 -->
@@ -75,19 +72,37 @@
 </template>
 
 <script>
+import store from '@/store/index.js'
 export default {
-
+  data () {
+    return {
+      isCollapse: false,
+      name: '',
+      photo: ''
+    }
+  },
+  created () {
+    const user = store.getUser()
+    console.log(user.name)
+    this.name = user.name
+    this.photo = user.photo
+  },
   methods: {
     toggleMenu () {
       this.isCollapse = !this.isCollapse
-    }
-  },
-  data () {
-    return {
-      isCollapse: false
+    },
+    setting () {
+      // alert(111)
+      this.$router.push('/setting')
+    },
+    logout () {
+      // alert(222)
+      // store.deluser()
+      this.$router.push('/login')
     }
   }
 }
+
 </script>
 
 <style scoped lang="less">
@@ -106,11 +121,11 @@ export default {
         140px auto;
     }
     .miniLogo {
-        background-image:url(../../assets/images/logo_admin_01.png);
-        background-size: 36px auto;
+      background-image: url(../../assets/images/logo_admin_01.png);
+      background-size: 36px auto;
     }
-    .el-menu{
-        border: none;
+    .el-menu {
+      border: none;
     }
   }
   .el-header {
